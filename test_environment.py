@@ -23,3 +23,17 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
+    from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+    )
+    from langchain.schema import HumanMessage, SystemMessage
+    from langchain_community.chat_models.openai import ChatOpenAI
+    import os
+
+    from tests.cog.agent.test_react import test_generate
+
+
+    from tests.cog.agent.test_react import test_Alfworld_react_generate, test_FEVER_react_generate

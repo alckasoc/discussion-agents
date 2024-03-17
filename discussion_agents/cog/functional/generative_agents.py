@@ -5,7 +5,7 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import faiss
+from langchain.vectorstores import FAISS 
 
 from langchain.chains import LLMChain
 from langchain.docstore import InMemoryDocstore
