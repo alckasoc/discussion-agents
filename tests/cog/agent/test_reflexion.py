@@ -98,7 +98,9 @@ def test_reflexion_cot_generate() -> None:
         ]
     )
     reflexion_cot_agent = ReflexionCoTAgent(
-        self_reflect_llm=FakeListChatModel(responses=["1"]), action_llm=action_llm
+        self_reflect_llm=FakeListChatModel(responses=["1"]),
+        action_llm=action_llm,
+        max_trials=1,
     )
 
     out = reflexion_cot_agent.generate(
@@ -158,7 +160,9 @@ def test_reflexion_cot_generate() -> None:
         ]
     )
     reflexion_cot_agent = ReflexionCoTAgent(
-        self_reflect_llm=FakeListChatModel(responses=["1"]), action_llm=action_llm
+        self_reflect_llm=FakeListChatModel(responses=["1"]),
+        action_llm=action_llm,
+        max_trials=1,
     )
 
     out = reflexion_cot_agent.generate(
@@ -188,7 +192,9 @@ def test_reflexion_cot_generate() -> None:
         ]
     )
     reflexion_cot_agent = ReflexionCoTAgent(
-        self_reflect_llm=FakeListChatModel(responses=["1"]), action_llm=action_llm
+        self_reflect_llm=FakeListChatModel(responses=["1"]),
+        action_llm=action_llm,
+        max_trials=1,
     )
     out = reflexion_cot_agent.generate(
         question=question, key=key, context=context, strategy="last_attempt"
@@ -217,7 +223,9 @@ def test_reflexion_cot_generate() -> None:
         ]
     )
     reflexion_cot_agent = ReflexionCoTAgent(
-        self_reflect_llm=FakeListChatModel(responses=["1"]), action_llm=action_llm
+        self_reflect_llm=FakeListChatModel(responses=["1"]),
+        action_llm=action_llm,
+        max_trials=1,
     )
     out = reflexion_cot_agent.generate(
         question=question, key=key, context=None, strategy=None
@@ -238,7 +246,7 @@ def test_reflexion_cot_generate() -> None:
     assert "\n".join(out[0][2]) == gt_out_str
 
     # Test reach max_trials.
-    gt_out_scratchpad = '\nThought: The context provided states that VIVA Media AG changed its name to VIVA Media GmbH in 2004. Based on the information given, the new acronym "GmbH" stands for "Gesellschaft mit beschränkter Haftung" in German, which translates to "company with limited liability" in English.Action: Finish[Company with limited liability]\nAction: Finish[Company with limited liability]\nObservation: Answer is INCORRECT\nThought: The reflection provided valuable insight into the previous mistake. To align with the question\'s request for the meaning of the new acronym in German, I should provide the answer in German, which is "Gesellschaft mit beschränkter Haftung". This will ensure accuracy and avoid repeating the previous error.Action: Finish[Gesellschaft mit beschränkter Haftung]\nAction: Finish[Gesellschaft mit beschränkter Haftung]\nObservation: Answer is CORRECT'
+    gt_out_scratchpad = '\nThought: The reflection provided valuable insight into the previous mistake. To align with the question\'s request for the meaning of the new acronym in German, I should provide the answer in German, which is "Gesellschaft mit beschränkter Haftung". This will ensure accuracy and avoid repeating the previous error.Action: Finish[Gesellschaft mit beschränkter Haftung]\nAction: Finish[Gesellschaft mit beschränkter Haftung]\nObservation: Answer is CORRECT'   
     gt_out = [
         'Thought: The context provided states that VIVA Media AG changed its name to VIVA Media GmbH in 2004. Based on the information given, the new acronym "GmbH" stands for "Gesellschaft mit beschränkter Haftung" in German, which translates to "company with limited liability" in English.Action: Finish[Company with limited liability]\nAction: Finish[Company with limited liability]\nObservation: Answer is INCORRECT',
         'Thought: The reflection provided valuable insight into the previous mistake. To align with the question\'s request for the meaning of the new acronym in German, I should provide the answer in German, which is "Gesellschaft mit beschränkter Haftung". This will ensure accuracy and avoid repeating the previous error.Action: Finish[Gesellschaft mit beschränkter Haftung]\nAction: Finish[Gesellschaft mit beschränkter Haftung]\nObservation: Answer is CORRECT',
@@ -285,7 +293,7 @@ def test_reflexion_cot_generate() -> None:
         'Thought: Upon reflecting on the incorrect answer I provided, I realize that the phrasing discrepancy in my response may have been the reason for the error. While I correctly identified that the new acronym for VIVA Media AG was GmbH, I did not provide the full expansion of the acronym as "Gesellschaft mit beschränkter Haftung." This lack of completeness in my answer likely led to it being marked as incorrect. In the future, I will ensure to always provide the complete expansion of acronyms when responding to similar questions to avoid any phrasing discrepancies.\nAction: Finish[VIVA Media GmbH]\nObservation: Answer is INCORRECT',
         'Thought: The reason for the failure in this trial could be the discrepancy in the phrasing of the answer. The question asked for the acronym of the new name, while the provided answer included the full name "VIVA Media GmbH". To avoid this mistake, I should provide only the acronym "GmbH" as the answer, as it directly corresponds to the acronym in the question. This adjustment will ensure a more accurate match between the question and the answer provided.Action: Finish[GmbH]\nAction: Finish[GmbH]\nObservation: Answer is INCORRECT',
     ]
-    gt_out_scratchpad = '\nThought: Upon reflecting on the incorrect answer I provided, I realize that the phrasing discrepancy in my response may have been the reason for the error. While I correctly identified that the new acronym for VIVA Media AG was GmbH, I did not provide the full expansion of the acronym as "Gesellschaft mit beschränkter Haftung." This lack of completeness in my answer likely led to it being marked as incorrect. In the future, I will ensure to always provide the complete expansion of acronyms when responding to similar questions to avoid any phrasing discrepancies.\nAction: Finish[VIVA Media GmbH]\nObservation: Answer is INCORRECT\nThought: The reason for the failure in this trial could be the discrepancy in the phrasing of the answer. The question asked for the acronym of the new name, while the provided answer included the full name "VIVA Media GmbH". To avoid this mistake, I should provide only the acronym "GmbH" as the answer, as it directly corresponds to the acronym in the question. This adjustment will ensure a more accurate match between the question and the answer provided.Action: Finish[GmbH]\nAction: Finish[GmbH]\nObservation: Answer is INCORRECT'
+    gt_out_scratchpad = '\nThought: The reason for the failure in this trial could be the discrepancy in the phrasing of the answer. The question asked for the acronym of the new name, while the provided answer included the full name "VIVA Media GmbH". To avoid this mistake, I should provide only the acronym "GmbH" as the answer, as it directly corresponds to the acronym in the question. This adjustment will ensure a more accurate match between the question and the answer provided.Action: Finish[GmbH]\nAction: Finish[GmbH]\nObservation: Answer is INCORRECT'
     gt_reflections = [
         'The reason for the failure in this trial could be the discrepancy in the phrasing of the answer. The question asked for the acronym of the new name, while the provided answer included the full name "VIVA Media GmbH". To mitigate this issue in future trials, a more concise and high-level plan would be to provide only the acronym "GmbH" as the answer, as it directly corresponds to the acronym in the question. This adjustment will ensure a more accurate match between the question and the answer provided.'
     ]
@@ -446,7 +454,9 @@ def test_reflexion_react_generate() -> None:
     ]
     action_llm = FakeListChatModel(responses=responses)
     agent = ReflexionReActAgent(
-        self_reflect_llm=FakeListChatModel(responses=["1"]), action_llm=action_llm
+        self_reflect_llm=FakeListChatModel(responses=["1"]),
+        action_llm=action_llm,
+        max_trials=1,
     )
     out = agent.generate(question=question, key=key, strategy=None)
     assert isinstance(out, list)
@@ -492,7 +502,7 @@ def test_reflexion_react_generate() -> None:
     action_llm = FakeListChatModel(responses=action_responses)
     self_reflect_llm = FakeListChatModel(responses=self_reflect_responses)
     agent = ReflexionReActAgent(
-        self_reflect_llm=self_reflect_llm, action_llm=action_llm
+        self_reflect_llm=self_reflect_llm, action_llm=action_llm, max_trials=1
     )
     out = agent.generate(question=question, key=key, strategy=None)
 

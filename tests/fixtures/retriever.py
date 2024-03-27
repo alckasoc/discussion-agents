@@ -3,10 +3,10 @@
 import faiss
 import pytest
 
-from langchain.docstore import InMemoryDocstore
-from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.retrievers import TimeWeightedVectorStoreRetriever
-from langchain.vectorstores import FAISS
+from langchain_community.docstore import InMemoryDocstore
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores.faiss import FAISS
 
 embedding_size = (
     768  # Embedding dimension for all-mpnet-base-v2. FAISS needs the same count.

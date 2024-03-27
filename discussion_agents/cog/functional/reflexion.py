@@ -127,7 +127,7 @@ def _build_cot_agent_prompt(
         context (Optional[str]): The context of the conversation or query. Defaults to None.
         prompt (str, optional): Prompt template string. Defaults to REFLEXION_COT_INSTRUCTION_NO_CONTEXT and
             REFLEXION_COT_INSTRUCTION if context is provided. Must include examples, reflections,
-            question, scratchpad, and context.
+            question, scratchpad, and context, if context is provided.
 
     Returns:
         str: A formatted prompt template ready for use.
@@ -135,22 +135,38 @@ def _build_cot_agent_prompt(
     if context and prompt == REFLEXION_COT_INSTRUCTION_NO_CONTEXT:
         prompt = REFLEXION_COT_INSTRUCTION
 
-    prompt = PromptTemplate(
-        input_variables=[
-            "examples",
-            "reflections",
-            "question",
-            "scratchpad",
-            "context",
-        ],
-        template=prompt,
-    ).format(
-        examples=examples,
-        reflections=reflections,
-        question=question,
-        scratchpad=scratchpad,
-        context=context if context else "",
-    )
+    if context:
+        prompt = PromptTemplate(
+            input_variables=[
+                "examples",
+                "reflections",
+                "question",
+                "scratchpad",
+                "context",
+            ],
+            template=prompt,
+        ).format(
+            examples=examples,
+            reflections=reflections,
+            question=question,
+            scratchpad=scratchpad,
+            context=context,
+        )
+    else:
+        prompt = PromptTemplate(
+            input_variables=[
+                "examples",
+                "reflections",
+                "question",
+                "scratchpad",
+            ],
+            template=prompt,
+        ).format(
+            examples=examples,
+            reflections=reflections,
+            question=question,
+            scratchpad=scratchpad,
+        )
 
     return prompt
 
@@ -193,7 +209,6 @@ def _prompt_cot_agent(
         context=context,
         prompt=prompt,
     )
-
     out = llm(
         [
             HumanMessage(
@@ -225,7 +240,7 @@ def _build_cot_reflection_prompt(
         context (Optional[str]): The context of the conversation or query. Defaults to None.
         prompt (str, optional): Prompt template string. Defaults to REFLEXION_COT_REFLECT_INSTRUCTION_NO_CONTEXT and
             REFLEXION_COT_REFLECT_INSTRUCTION if context is provided. Must include examples,
-            question, scratchpad, and context.
+            question, scratchpad, and context, if context is provided.
 
     Returns:
         str: A formatted prompt template ready for use.
@@ -233,16 +248,26 @@ def _build_cot_reflection_prompt(
     if context and prompt == REFLEXION_COT_REFLECT_INSTRUCTION_NO_CONTEXT:
         prompt = REFLEXION_COT_REFLECT_INSTRUCTION
 
-    prompt = PromptTemplate(
-        input_variables=["examples", "question", "scratchpad", "context"],
-        template=prompt,
-    ).format(
-        examples=examples,
-        question=question,
-        scratchpad=scratchpad,
-        context=context if context else "",
-    )
-
+    if context:
+        prompt = PromptTemplate(
+            input_variables=["examples", "question", "scratchpad", "context"],
+            template=prompt,
+        ).format(
+            examples=examples,
+            question=question,
+            scratchpad=scratchpad,
+            context=context,
+        )
+    else:
+        prompt = PromptTemplate(
+            input_variables=["examples", "question", "scratchpad"],
+            template=prompt,
+        ).format(
+            examples=examples,
+            question=question,
+            scratchpad=scratchpad,
+        )
+        
     return prompt
 
 
@@ -281,7 +306,6 @@ def _prompt_cot_reflection(
         context=context,
         prompt=prompt,
     )
-
     out = llm(
         [
             HumanMessage(
@@ -482,7 +506,7 @@ def _build_react_agent_prompt(
         scratchpad (str): The scratchpad content related to the question.
         max_steps (int): Maximum number of steps.
         prompt (str, optional): Prompt template string. Defaults to REFLEXION_REACT_INSTRUCTION.
-            Must include examples, reflections, question, and scratchpad.
+            Must include examples, reflections, question, scratchpad, and max_steps.
 
     Returns:
         str: A formatted prompt template ready for use.
@@ -522,7 +546,7 @@ def _prompt_react_agent(
         scratchpad (str): The scratchpad content related to the question.
         max_steps (int): Maximum number of steps.
         prompt (str, optional): Prompt template string. Defaults to REFLEXION_REACT_INSTRUCTION.
-            Must include examples, reflections, question, and scratchpad.
+            Must include examples, reflections, question, scratchpad, and max_steps.
 
     Returns:
         str: The generated reflection prompt.
@@ -535,7 +559,6 @@ def _prompt_react_agent(
         max_steps=max_steps,
         prompt=prompt,
     )
-
     out = llm(
         [
             HumanMessage(
@@ -543,6 +566,7 @@ def _prompt_react_agent(
             )
         ]
     ).content
+    print("OUT:\n", repr(out), "\n\n")
     assert isinstance(out, str)
     return remove_newline(out)
 
@@ -576,7 +600,7 @@ def _is_halted(
         max_tokens (int): Maximum allowed token count.
         enc (Encoding): The encoder to calculate token length.
         prompt (str, optional): Prompt template string. Defaults to REFLEXION_REACT_INSTRUCTION.
-            Must include examples, reflections, question, and scratchpad.
+            Must include examples, reflections, question, scratchpad, and max_steps.
 
     Returns:
         bool: True if the operation should be halted, False otherwise.
@@ -658,7 +682,6 @@ def _prompt_react_reflection(
     prompt = _build_react_reflection_prompt(
         examples=examples, question=question, scratchpad=scratchpad, prompt=prompt
     )
-
     out = llm(
         [
             HumanMessage(
@@ -666,6 +689,7 @@ def _prompt_react_reflection(
             )
         ]
     ).content
+    print("REFLECTION OUT:\n", repr(out), "\n\n")
     assert isinstance(out, str)
     return remove_newline(out)
 

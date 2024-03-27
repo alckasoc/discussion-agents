@@ -7,6 +7,10 @@ from typing import Any
 class BaseAgent(ABC):
     """Base agent class providing a general interface for agent operations."""
 
+    def reset(self, *args: Any, **kwargs: Any) -> Any:
+        """Optionally resets the agent's state."""
+        raise NotImplementedError("Reset method not implemented.")
+
     def plan(self, *args: Any, **kwargs: Any) -> Any:
         """Optionally implementable method to plan an action or set of actions."""
         raise NotImplementedError("Plan method not implemented.")

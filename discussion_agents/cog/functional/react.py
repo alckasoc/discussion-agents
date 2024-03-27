@@ -81,7 +81,6 @@ def _prompt_agent(
             )
         ]
     ).content
-
     assert isinstance(out, str)
     return remove_newline(out)
 

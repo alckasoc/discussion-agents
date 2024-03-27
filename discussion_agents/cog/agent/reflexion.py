@@ -161,6 +161,8 @@ class ReflexionCoTAgent(BaseAgent):
         patience_cnt = 0
         result = []
         while not EM(self._answer, key) and self._trial_n < self.max_trials:
+            self.memory.clear()
+
             # Reflect if possible.
             reflections_str = ""
             if self._trial_n > 0 and not EM(self._answer, key) and strategy:
@@ -308,8 +310,8 @@ class ReflexionReActAgent(BaseAgent):
         enc (Encoding): tiktoken Encoding for tracking token count of prompts.
 
     Methods:
-        generate(context, question, key, strategy): Generates a response based on the given context, question, and strategy.
-        reflect(context, question, strategy): Reflects on the previous response and modifies the strategy accordingly.
+        generate(question, key, strategy): Generates a response based on the given question and strategy.
+        reflect(question, strategy): Reflects on the previous response and modifies the strategy accordingly.
         retrieve(): Retrieves the current memory state of the agent.
         reset(): Resets the agent's state for a new problem-solving session.
     """
@@ -391,7 +393,7 @@ class ReflexionReActAgent(BaseAgent):
                 - "last_attempt_and_reflexion": This strategy combines the 'last_attempt' and 'reflexion' strategies.
             reset (bool): Whether to reset the internal state before processing. Defaults to True.
             prompt (str, optional): Prompt template string. Defaults to REFLEXION_REACT_INSTRUCTION.
-                Must include examples, reflections, question, and scratchpad.
+                Must include examples, reflections, question, scratchpad, and max_steps.
             reflect_examples (str, optional): Reflection fewshot examples. Defaults to REFLEXION_REACT_REFLECT_FEWSHOT_EXAMPLES.
             reflect_prompt (str, optional): Reflect prompt template string. Defaults to REFLEXION_REACT_REFLECT_INSTRUCTION.
                 Must include examples, question, and scratchpad.
@@ -432,6 +434,7 @@ class ReflexionReActAgent(BaseAgent):
             self._step_n = 1
             self._finished = False
             self._answer = ""
+            self.memory.clear()
             while not _is_halted(
                 finished=self._finished,
                 step_n=self._step_n,

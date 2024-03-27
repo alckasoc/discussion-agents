@@ -27,7 +27,6 @@ def test__build_agent_prompt() -> None:
         "(3) Finish[answer], which returns the answer and finishes the task.\n"
         "You have a maximum of 1 steps.\n\n"
         "Here are some examples:\n"
-        "\n"
         "Question: What is the elevation range for the area that the eastern sector of the Colorado orogeny extends into?\n"
         "Thought 1: I need to search Colorado orogeny, find the area that the eastern sector of the Colorado orogeny extends into, then find the elevation range of the area.\n"
         "Action 1: Search[Colorado orogeny]\n"
@@ -89,8 +88,7 @@ def test__build_agent_prompt() -> None:
         "Observation 2: Leonid Anatolievich Levin is a Soviet-American mathematician and computer scientist. \n"
         "Thought 3: Leonid Levin is a mathematician and computer scientist. So Pavel Urysohn and Leonid Levin have the same type of work. \n"
         "Action 3: Finish[yes]\n"
-        "\n"
-        "(END OF EXAMPLES)\n"
+        "(END OF EXAMPLES)\n\n"
         "Question: "
     )
 
