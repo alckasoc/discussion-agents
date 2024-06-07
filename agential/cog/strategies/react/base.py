@@ -4,6 +4,7 @@ from abc import abstractmethod
 from typing import Dict, Tuple
 
 from langchain_core.language_models.chat_models import BaseChatModel
+from pydantic import BaseModel
 
 from agential.cog.strategies.base import BaseStrategy
 
@@ -51,6 +52,23 @@ class ReActBaseStrategy(BaseStrategy):
 
         Returns:
             str: The generated observation.
+        """
+        pass
+
+    @abstractmethod
+    def create_output_pydantic(
+        self, thought: str, action_type: str, query: str, observation: str
+    ) -> BaseModel:
+        """Creates a Pydantic model of the output components.
+
+        Args:
+            thought (str): The generated thought.
+            action_type (str): The type of action performed.
+            query (str): The query for the action.
+            observation (str): The generated observation.
+
+        Returns:
+            BaseModel: A Pydantic model containing the thought, action type, query, and observation.
         """
         pass
 

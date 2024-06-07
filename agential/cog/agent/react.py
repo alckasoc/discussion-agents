@@ -7,6 +7,7 @@ Paper Repository: https://github.com/ysymyth/ReAct
 from typing import Any, Dict, List
 
 from langchain_core.language_models.chat_models import BaseChatModel
+from pydantic import BaseModel
 
 from agential.cog.agent.base import BaseAgent
 from agential.cog.strategies.strategy_factory import ReActStrategyFactory
@@ -46,7 +47,7 @@ class ReActAgent(BaseAgent):
         additional_keys: Dict[str, str] = {},
         reset: bool = True,
         **kwargs: Dict[str, Any],
-    ) -> List[Dict[str, str]]:
+    ) -> List[BaseModel]:
         """Processes a given question through ReAct.
 
         Iteratively applies the think-act-observe cycle to generate an answer for the question.
@@ -61,8 +62,8 @@ class ReActAgent(BaseAgent):
             **kwargs (Dict[str, Any]): Additional parameters for flexibility.
 
         Returns:
-            List[Dict[str, str]]: The list of accumulated output from the ReAct process,
-                each dictionary consists of a thought, action type/query, observation, and answer.
+            List[ReActOutput]: The list of accumulated output from the ReAct process,
+                each step represented by a ReActOutput model.
         """
         if reset:
             self.reset()
@@ -73,16 +74,16 @@ class ReActAgent(BaseAgent):
             idx=idx,
             question=question,
             examples=examples,
-            prompt=prompt,
             additional_keys=additional_keys,
+            prompt=prompt,
             **kwargs,
         ):
             # Think.
             thought = self.strategy.generate(
                 question=question,
                 examples=examples,
-                prompt=prompt,
                 additional_keys=additional_keys,
+                prompt=prompt,
                 **kwargs,
             )
 
@@ -90,8 +91,8 @@ class ReActAgent(BaseAgent):
             action_type, query = self.strategy.generate_action(
                 question=question,
                 examples=examples,
-                prompt=prompt,
                 additional_keys=additional_keys,
+                prompt=prompt,
                 **kwargs,
             )
 
@@ -99,10 +100,13 @@ class ReActAgent(BaseAgent):
             obs = self.strategy.generate_observation(
                 idx=idx, action_type=action_type, query=query
             )
-
+            # This line is modified for testing structured output in Pydantic model
             out.append(
-                self.strategy.create_output_dict(
-                    thought=thought, action_type=action_type, query=query, obs=obs
+                self.strategy.create_output_pydantic(
+                    thought=thought,
+                    action_type=action_type,
+                    query=query,
+                    observation=obs,
                 )
             )
 
