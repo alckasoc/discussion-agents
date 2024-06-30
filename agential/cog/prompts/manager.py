@@ -2,6 +2,12 @@
 
 from typing import Dict
 
+from agential.cog.prompts.agent import (
+    critic as critic,
+    expel as expel,
+    react as react,
+    reflexion as reflextion,
+)
 from agential.cog.prompts.benchmark.ambignq import (
     AMBIGNQ_FEWSHOT_EXAMPLES_COT,
     AMBIGNQ_FEWSHOT_EXAMPLES_DIRECT,
@@ -185,3 +191,83 @@ def get_fewshot_examples(mode: Dict[str, str], fewshot_type: str) -> str:
         )
 
     return examples
+
+
+def get_examples_and_prompts(
+    agent_name: str = "",
+    benchmark_type: str = "",
+    benchmark_name: str = "",
+    fewshot_type: str = "",
+) -> dict:
+
+    """Available Agent Names:
+    - critic
+    - react
+    - expel
+    - reflexion.
+
+    Available Benchmark Types and Names:
+        - qa:
+            - hotpotqa: Supports "cot", "direct", "react"
+            - fever: Supports "cot", "direct", "react"
+            - triviaqa: Supports "cot", "direct", "react"
+            - ambignq: Supports "cot", "direct", "react"
+        - math:
+            - gsm8k: Supports "pot", "react"
+            - svamp: Supports "pot", "react"
+            - tabmwp: Supports "pot", "react"
+        - code:
+            - humaneval: Supports "pot", "react"
+            - mbpp: Supports "pot", "react".
+
+    Available Few-Shot Types:
+        - "cot"
+        - "direct"
+        - "react"
+        - "pot"
+
+    Args:
+        agent_name (str): The name of the agent. If given, it should be one of the predefined name of the agent.
+        benchmark_type (str): The type of the benchmark. If given, it should be one of the predefined types in the benchmark class.
+        benchmark_name (str): The name of the benchmark. If given, it should be one of the predefined names in the benchmark class.
+        fewshot_type (str): The type of few-shot examples. If given, it should be one of the predefined types in the FewShotType class.
+
+    Returns:
+        dict: The few-shot prompt and examples corresponding to the input.
+    """
+    if benchmark_type and (benchmark_type not in Benchmarks.__dict__):
+        raise ValueError(f"Benchmark type '{benchmark_type}' not found.")
+
+    if benchmark_name and (benchmark_name not in BENCHMARK_STRINGS[benchmark_type]):
+        raise ValueError(
+            f"Benchmark '{benchmark_name}' not found in benchmark type '{benchmark_type}'."
+        )
+    agent_name = agent_name.lower()
+    result = {"prompts": {}, "examples": {}}
+    if agent_name and agent_name in ["critic", "react", "expel", "reflextion"]:
+        prompts = [prompt for prompt in dir(critic) if not prompt.startswith("__")]
+        # print(prompts)
+        if benchmark_name:
+            prompts = [prompt for prompt in prompts if benchmark_name.upper() in prompt]
+            package = f"agential.cog.prompts.agent.{agent_name}"
+            for prompt in prompts:
+                imported = getattr(__import__(package, fromlist=[prompt]), prompt)
+                if "INSTRUCTION" in prompt:
+                    result["prompts"][prompt] = imported
+                else:
+                    result["examples"][prompt] = imported
+
+    if benchmark_type and (benchmark_type in Benchmarks.__dict__):
+        if benchmark_name and (benchmark_name in BENCHMARK_STRINGS[benchmark_type]):
+            if fewshot_type:
+                result["examples"][benchmark_type] = BENCHMARK_STRINGS[benchmark_type][
+                    benchmark_name
+                ].get(fewshot_type)
+            else:
+                result["examples"][benchmark_type] = BENCHMARK_STRINGS[benchmark_type][
+                    benchmark_name
+                ]
+        else:
+            result["examples"][benchmark_type] = BENCHMARK_STRINGS[benchmark_type]
+
+    return result
