@@ -23,10 +23,12 @@ from agential.cog.prompts.benchmark.hotpotqa import (
     HOTPOTQA_FEWSHOT_EXAMPLES_REACT,
 )
 from agential.cog.prompts.benchmark.humaneval import (
+    HUMANEVAL_FEWSHOT_EXAMPLES_COT,
     HUMANEVAL_FEWSHOT_EXAMPLES_POT,
     HUMANEVAL_FEWSHOT_EXAMPLES_REACT,
 )
 from agential.cog.prompts.benchmark.mbpp import (
+    MBPP_FEWSHOT_EXAMPLES_COT,
     MBPP_FEWSHOT_EXAMPLES_POT,
     MBPP_FEWSHOT_EXAMPLES_REACT,
 )
@@ -129,10 +131,12 @@ BENCHMARK_STRINGS = {
         Benchmarks.code.HUMANEVAL: {
             FewShotType.POT: HUMANEVAL_FEWSHOT_EXAMPLES_POT,
             FewShotType.REACT: HUMANEVAL_FEWSHOT_EXAMPLES_REACT,
+            FewShotType.COT: HUMANEVAL_FEWSHOT_EXAMPLES_COT,
         },
         Benchmarks.code.MBPP: {
             FewShotType.POT: MBPP_FEWSHOT_EXAMPLES_POT,
             FewShotType.REACT: MBPP_FEWSHOT_EXAMPLES_REACT,
+            FewShotType.COT: MBPP_FEWSHOT_EXAMPLES_COT,
         },
     },
 }
@@ -152,8 +156,8 @@ def get_fewshot_examples(mode: Dict[str, str], fewshot_type: str) -> str:
             - svamp: Supports "pot", "cot", "react"
             - tabmwp: Supports "pot", "cot", "react"
         - code:
-            - humaneval: Supports "pot", "react"
-            - mbpp: Supports "pot", "react"
+            - humaneval: Supports "pot", "cot", "react"
+            - mbpp: Supports "pot", "cot", "react"
 
     Available Few-Shot Types:
         - "cot"

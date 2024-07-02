@@ -1859,7 +1859,6 @@ CRITIC_CRITIQUE_INSTRUCTION_HUMANEVAL = """{examples}
 
 {tests}
 ```
-
 Execution: {execution_status} 
 
 What's the problem with the above code?
@@ -1880,7 +1879,6 @@ def has_duplicate_names(names_list: List[str]) -> bool:
 assert has_duplicate_names(['Alice', 'Bob', 'Charlie', 'Alice']) == True
 assert has_duplicate_names(['Alice', 'Bob', 'Charlie', 'Dave']) == False
 ```
-
 Execution: AssertionError()
 
 What's the problem with the above code?
@@ -1934,7 +1932,6 @@ assert average_positive([-5, 0, 5, 15]) == 10.0
 assert average_positive([100, 200, -100, 0]) == 150.0
 assert average_positive([-1, -2, -3]) == 0
 ```
-
 Execution: AssertionError()
 
 What's the problem with the above code?
@@ -1993,7 +1990,6 @@ def exceeds_threshold(measurements: List[float], threshold: float) -> int:
 assert exceeds_threshold([100, 102, 107, 103], 5) == 1
 assert exceeds_threshold([100, 101, 102, 103], 2) == 0
 ```
-
 Execution: AssertionError()
 
 What's the problem with the above code?
@@ -2050,33 +2046,32 @@ def sum_even_indexed(numbers: List[int]) -> int:
     >>> sum_even_indexed([7])
     7
     \"\"\"
-    return sum(num for i, num in enumerate(numbers) if (i + 1) % 2 == 0)
+    return sum(num for i, num in enumerate(numbers) if i % 2 == 0)
 
 assert sum_even_indexed([10, 3, 5, 2, 8]) == 23
 assert sum_even_indexed([1, 2, 3, 4, 5, 6]) == 9
 assert sum_even_indexed([0, 100, 200, 300]) == 200
 assert sum_even_indexed([7]) == 7
 ```
-
-Execution: AssertionError()
+Execution: Done
 
 What's the problem with the above code?
 
-1. The function incorrectly sums up numbers at odd indices instead of even indices due to an off-by-one error. This error results from misinterpreting index positions because of adding 1 to the index before modulo operation.
+1. The function correctly sums up numbers at even indices, verifying the correctness through the provided assertions.
 
 2. Let's check the code:
 
 > numbers = [10, 3, 5, 2, 8]
 
-This defines a list of numbers where the correct function should sum the numbers at even indices (1, 3, 5) according to 0-based indexing.
+This defines a list of numbers where the function should sum the numbers at even indices (0, 2, 4) according to 0-based indexing.
 
-> return sum(num for i, num in enumerate(numbers) if (i + 1) % 2 == 0)
+> return sum(num for i, num in enumerate(numbers) if i % 2 == 0)
 
-This line contains the core functionality but introduces a logical error. The condition `(i + 1) % 2 == 0` is intended to sum numbers at even indices based on a zero-based index system. However, by adding 1 to the index, the function checks if the position is odd (1-based index), not even. This results in the function summing numbers at what are technically odd indices in a zero-based index system, like 1, 3, 5, etc., instead of 0, 2, 4.
+This line contains the core functionality and correctly sums the numbers at even indices. The condition `i % 2 == 0` accurately identifies even indices based on a zero-based index system.
 
-Overall, the function does not perform as expected because of a subtle logical error in handling index values. It miscounts the indices, summing the wrong set of numbers.
+Overall, the function performs as expected, correctly summing numbers at even indices. The assertions confirm that the function works properly with different test cases.
 
-Here's a better solution (include only function implementation):
+Here's the correct solution (include only function implementation):
 ```python
 def sum_even_indexed(numbers: List[int]) -> int:
     \"\"\"Sum numbers that are located at even indices in the list.
@@ -2106,18 +2101,18 @@ def are_anagrams(s1: str, s2: str) -> bool:
     >>> are_anagrams('Angel', 'Glean')
     True
     \"\"\"
-    return Counter(s1) == Counter(s2)
+    return Counter(s1.lower()) == Counter(s2.lower())
 
 assert are_anagrams('Listen', 'silent') == True
 assert are_anagrams('Hello', 'World') == False
 assert are_anagrams('Angel', 'Glean') == True
 ```
-
-Execution: AssertionError()
+Execution: Done
+Output: All assertions passed.
 
 What's the problem with the above code?
 
-1. The function fails to account for case sensitivity because it does not convert the strings to a uniform case before using the `Counter` to compare them, leading to incorrect results when strings differ only in case.
+1. The function correctly accounts for case sensitivity by converting the strings to a uniform case before using the `Counter` to compare them, leading to correct results.
 
 2. Let's check the code:
 
@@ -2125,13 +2120,13 @@ What's the problem with the above code?
 
 This defines two strings where the correct function should return True given they are case-insensitive anagrams.
 
-> return Counter(s1) == Counter(s2)
+> return Counter(s1.lower()) == Counter(s2.lower())
 
-The function returns `False` for `Counter('Listen') == Counter('silent')` because the `Counter` is case-sensitive, and thus counts 'L' and 'l' as different characters, resulting in unequal counters.
+The function returns `True` for `Counter('listen') == Counter('silent')` because the `Counter` is applied to the lowercase versions of both strings, ensuring case-insensitive comparison.
 
-Overall, the primary issue is that the function does not perform a case conversion before counting the characters, which is essential for a correct case-insensitive anagram comparison. This oversight leads to the function incorrectly determining that strings like 'Listen' and 'silent' are not anagrams due to case differences. The correct approach should involve converting both input strings to the same case (either all uppercase or all lowercase) before applying the `Counter`.
+Overall, the function performs as expected, correctly identifying anagrams while ignoring case differences. The assertions confirm that the function works properly with different test cases.
 
-Here's a better solution (include only function implementation):
+Here's the correct solution (include only function implementation):
 ```python
 from collections import Counter
 
@@ -2460,7 +2455,6 @@ Your code should pass these tests.
 
 {tests}
 ```
-
 Execution: {execution_status}
 
 What's the problem with the above code?

@@ -317,7 +317,7 @@ def test_generate(expel_experiences_10_fake_path: str) -> None:
                 {
                     "react_output": [
                         {
-                            "thought": "I need to find out the name of the giant silverware company that was started as a religious Utopian group and was run by Pierrepont Noyes for many years. I should search for the company's name and its history to gather more information. ",
+                            "thought": "I need to find out the name of the giant silverware company that was started as a religious Utopian group and was run by Pierrepont Noyes for many years. I should search for the company's name and its history to gather more information.",
                             "action_type": "Search",
                             "query": "giant silverware company religious Utopian group Pierrepont Noyes",
                             "observation": "Search result",
@@ -329,7 +329,7 @@ def test_generate(expel_experiences_10_fake_path: str) -> None:
                             "is_correct": False,
                         },
                         {
-                            "thought": "I need to search for more information about Oneida Limited to see if it matches the description of a giant silverware company that was started as a religious Utopian group and was run by Pierrepont Noyes. I should look for details about the company's history and any relevant connections to Noyes. ",
+                            "thought": "I need to search for more information about Oneida Limited to see if it matches the description of a giant silverware company that was started as a religious Utopian group and was run by Pierrepont Noyes. I should look for details about the company's history and any relevant connections to Noyes.",
                             "action_type": "Search",
                             "query": "Oneida Limited giant silverware company religious Utopian group Pierrepont Noyes",
                             "observation": "Search result",

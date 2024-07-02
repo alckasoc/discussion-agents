@@ -129,7 +129,9 @@ def test_reflexion_cot_generate_observation() -> None:
     llm = FakeListChatModel(responses=[])
     strategy = ReflexionCoTQAStrategy(llm=llm)
     is_correct, obs = strategy.generate_observation(
-        action_type="Finish", query="correct_answer", key="correct_answer"
+        action_type="Finish",
+        query="correct_answer",
+        key="correct_answer",
     )
     assert is_correct == True
     assert obs == "Answer is CORRECT"
@@ -138,7 +140,9 @@ def test_reflexion_cot_generate_observation() -> None:
     # Case 2: action_type is "Finish" and answer is incorrect.
     strategy = ReflexionCoTQAStrategy(llm=llm)
     is_correct, obs = strategy.generate_observation(
-        action_type="Finish", query="incorrect_answer", key="correct_answer"
+        action_type="Finish",
+        query="incorrect_answer",
+        key="correct_answer",
     )
     assert is_correct == False
     assert obs == "Answer is INCORRECT"
@@ -147,7 +151,9 @@ def test_reflexion_cot_generate_observation() -> None:
     # Case 3: action_type is not "Finish".
     strategy = ReflexionCoTQAStrategy(llm=llm)
     is_correct, obs = strategy.generate_observation(
-        action_type="Calculate", query="some_query", key="correct_answer"
+        action_type="Calculate",
+        query="some_query",
+        key="correct_answer",
     )
     assert is_correct == False
     assert obs == "Invalid action type, please try again."
@@ -537,27 +543,27 @@ def test_reflexion_react_halting_condition() -> None:
     # Test case 1: Halting condition met because answer is incorrect and index is less than max_trials.
     strategy = ReflexionReActQAStrategy(llm=llm, max_trials=5)
     strategy._answer = "incorrect_answer"
-    assert strategy.halting_condition(3, "correct_answer") == True
+    assert strategy.halting_condition(3, "correct_answer") == False
 
     # Test case 2: Halting condition not met because answer is correct.
     strategy = ReflexionReActQAStrategy(llm=llm, max_trials=5)
     strategy._answer = "correct_answer"
-    assert strategy.halting_condition(3, "correct_answer") == False
+    assert strategy.halting_condition(3, "correct_answer") == True
 
     # Test case 3: Halting condition not met because index is greater than or equal to max_trials.
     strategy = ReflexionReActQAStrategy(llm=llm, max_trials=3)
     strategy._answer = "incorrect_answer"
-    assert strategy.halting_condition(4, "correct_answer") == False
+    assert strategy.halting_condition(4, "correct_answer") == True
 
     # Test case 4: Halting condition met using max_trials from kwargs.
     strategy = ReflexionReActQAStrategy(llm=llm, max_trials=5)
     strategy._answer = "incorrect_answer"
-    assert strategy.halting_condition(3, "correct_answer", max_trials=4) == True
+    assert strategy.halting_condition(3, "correct_answer", max_trials=4) == False
 
     # Test case 5: Halting condition not met using max_trials from kwargs.
     strategy = ReflexionReActQAStrategy(llm=llm, max_trials=5)
     strategy._answer = "incorrect_answer"
-    assert strategy.halting_condition(4, "correct_answer", max_trials=3) == False
+    assert strategy.halting_condition(4, "correct_answer", max_trials=3) == True
 
 
 def test_reflexion_react_react_halting_condition() -> None:

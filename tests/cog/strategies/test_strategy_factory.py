@@ -34,6 +34,12 @@ from agential.cog.strategies.react.qa import (
     ReActHotQAStrategy,
     ReActTriviaQAStrategy,
 )
+from agential.cog.strategies.reflexion.code import (
+    ReflexionCoTHEvalStrategy,
+    ReflexionCoTMBPPStrategy,
+    ReflexionReActHEvalStrategy,
+    ReflexionReActMBPPStrategy,
+)
 from agential.cog.strategies.reflexion.math import (
     ReflexionCoTGSM8KStrategy,
     ReflexionCoTSVAMPStrategy,
@@ -257,6 +263,16 @@ def test_reflexioncot_strategy_factory_get_strategy() -> None:
         ReflexionCoTTabMWPStrategy,
     )
 
+    # Code benchmarks.
+    assert isinstance(
+        ReflexionCoTStrategyFactory.get_strategy({"code": "humaneval"}, llm=llm),
+        ReflexionCoTHEvalStrategy,
+    )
+    assert isinstance(
+        ReflexionCoTStrategyFactory.get_strategy({"code": "mbpp"}, llm=llm),
+        ReflexionCoTMBPPStrategy,
+    )
+
     # Test kwargs for QA strategy.
     strategy = ReflexionCoTStrategyFactory.get_strategy(
         {"qa": "hotpotqa"}, llm=llm, max_reflections=1
@@ -313,6 +329,16 @@ def test_reflexionreact_strategy_factory_get_strategy() -> None:
     assert isinstance(
         ReflexionReActStrategyFactory.get_strategy({"math": "tabmwp"}, llm=llm),
         ReflexionReActTabMWPStrategy,
+    )
+
+    # Code benchmarks.
+    assert isinstance(
+        ReflexionReActStrategyFactory.get_strategy({"code": "humaneval"}, llm=llm),
+        ReflexionReActHEvalStrategy,
+    )
+    assert isinstance(
+        ReflexionReActStrategyFactory.get_strategy({"code": "mbpp"}, llm=llm),
+        ReflexionReActMBPPStrategy,
     )
 
     # Test kwargs for QA strategy.

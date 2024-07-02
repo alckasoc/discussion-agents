@@ -147,7 +147,7 @@ class ReflexionCoTMathStrategy(ReflexionCoTBaseStrategy):
             prompt=prompt,
             additional_keys=additional_keys,
         )
-        thought = remove_newline(thought).split("Action")[0].strip().split("\n")[0]
+        thought = remove_newline(thought).split("Action")[0].strip()
         self._scratchpad += " " + thought
 
         return thought
@@ -204,7 +204,7 @@ class ReflexionCoTMathStrategy(ReflexionCoTBaseStrategy):
         Returns:
             Tuple[bool, str]: A boolean indicating correctness and the generated observation.
         """
-        answer, _ = safe_execute(self._answer)
+        answer, _ = safe_execute(query)
 
         self._scratchpad += f"\nObservation: "
         if action_type.lower() == "finish":
@@ -409,7 +409,7 @@ class ReflexionReActMathStrategy(ReflexionReActBaseStrategy):
             prompt=prompt,
             additional_keys=additional_keys,
         )
-        thought = remove_newline(thought).split("Action")[0]
+        thought = remove_newline(thought).split("Action")[0].strip()
         self._scratchpad += " " + thought
 
         return thought
@@ -561,8 +561,7 @@ class ReflexionReActMathStrategy(ReflexionReActBaseStrategy):
         """
         max_trials: int = kwargs.get("max_trials", self.max_trials)
         code_answer, _ = safe_execute(self._answer)
-
-        return not EM(code_answer[0], key, normalize=False) and idx < max_trials + 1
+        return EM(code_answer[0], key, normalize=False) or idx >= max_trials + 1
 
     def react_halting_condition(
         self,

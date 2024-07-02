@@ -45,7 +45,7 @@
 | **Methods / Benchmarks** |         MBPP         |      HumanEval       |
 | ------------------------ | :------------------: | :------------------: |
 | ReAct                    | :octicons-check-16:  | :octicons-check-16:  |
-| Reflexion                |                      |                      |
+| Reflexion                | :material-check-all: | :material-check-all: |
 | CRITIC                   | :octicons-check-16:  | :octicons-check-16:  |
 | LATS                     |                      |                      |
 
@@ -86,6 +86,34 @@
 | Reflexion                |          |         |            |
 | CRITIC                   |          |         |            |
 | LATS                     |          |         |            |
+
+## Types of errors
+
+### CRITIC
+
+Sure! Here's the section on CRITIC errors organized into a table for better readability:
+
+## Types of errors
+
+### CRITIC
+
+Certainly! Here's the section organized with each benchmark in a single row and the error types listed in a numbered format within the same cell:
+
+## Types of errors
+
+### CRITIC
+
+| Dataset   | Error Types                                                                                                              |
+| --------- | ------------------------------------------------------------------------------------------------------------------------ |
+| HUMANEVAL | 1. Logical error<br>2. Logical error<br>3. Logical error<br>4. No error<br>5. No error                                   |
+| MBPP      | 1. Logical error<br>2. Logical error<br>3. Logical error<br>4. No error<br>5. No error                                   |
+| GSM8K     | 1. Code efficiency<br>2. NameError (var not defined)<br>3. Logical error<br>4. Logical error<br>5. Logical error         |
+| SVAMP     | 1. Logical error<br>2. No error<br>3. Logical error<br>4. No error<br>5. No error                                        |
+| TABMWP    | 1. Incorrect answer format<br>2. NameError (var not defined)<br>3. No error<br>4. Incorrect answer format<br>5. No error |
+| AMBIGNQ   | 1. No error<br>2. No error<br>3. Incorrect answer/answer format<br>4. No error<br>5. Incorrect answer/answer format      |
+| HOTPOTQA  | 1. No error<br>2. No error<br>3. No error<br>4. Incorrect answer/answer format<br>5. Incorrect answer/answer format      |
+| TRIVIAQA  | 1. Incorrect answer<br>2. No error<br>3. Incorrect answer<br>4. No error<br>5. No error                                  |
+| FEVER     | 1. Incorrect answer<br>2. Incorrect answer format<br>3. No error<br>4. No error<br>5. No error                           |
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
